@@ -21,9 +21,8 @@ var formats = {
     if (data === null){
       return cb(null, 'null');
     }
-    var res;
     try{
-      res = JSON.stringify(data);
+      JSON.stringify(data);
     }
     catch(e){
       return cb(e);
@@ -55,32 +54,44 @@ function recursiveFormat (data, rec){
       return ['null'];
     }
     else if (data instanceof Array){
-      return data.reduce(function(gRes, val){
-        var localRes = recursiveFormat(val, true);
-        if (localRes.length) {
-          return gRes.concat(localRes.map(function(val){
-            return (rec ? '\t' : '') + val
-          }));
-        }
-        return gRes;
-      }, []);
+      return formatArray(data, rec);
     }
     else {
-      return Object.keys(data).reduce(function(gRes, key){
-        var localRes = recursiveFormat(data[key], true);
-        if (localRes.length) {
-          if (typeof data[key] === 'object'){
-            return gRes.concat([(rec ? '\t' : '') + key + ':\n'+ localRes.map(function(val){
-              return (rec ? '\t' : '') + val;
-            }).join('\n')]);
-          }
-          else {
-            return gRes.concat([(rec ? '\t' : '') + key + ':\t'+ localRes.join(',\n')]);
-          }
-        }
-        return gRes;
-      }, []);
+
+      if (data.toString === Object.toString){
+        return formatObject(data, rec);
+      }
+      return [(rec ? '\t': '') + data.toString()];
     }
   }
   return [data.toString()];
+}
+
+function formatObject(data, rec){
+  return Object.keys(data).reduce(function(gRes, key){
+    var localRes = recursiveFormat(data[key], true);
+    if (localRes.length) {
+      if (typeof data[key] === 'object'){
+        return gRes.concat([(rec ? '\t' : '') + key + ':\n'+ localRes.map(function(val){
+          return (rec ? '\t' : '') + val;
+        }).join('\n')]);
+      }
+      else {
+        return gRes.concat([(rec ? '\t' : '') + key + ':\t'+ localRes.join(',\n')]);
+      }
+    }
+    return gRes;
+  }, []);
+}
+
+function formatArray(data, rec){
+  return data.reduce(function(gRes, val){
+    var localRes = recursiveFormat(val, true);
+    if (localRes.length) {
+      return gRes.concat(localRes.map(function(val){
+        return (rec ? '\t' : '') + val
+      }));
+    }
+    return gRes;
+  }, []);
 }
