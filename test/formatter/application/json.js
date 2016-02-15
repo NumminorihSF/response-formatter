@@ -45,7 +45,7 @@ describe('formatter/application/json', function(){
     });
   });
 
-  it('wrap deep Object to formatted String', function(done){
+  it('wrap deep Object to JSON', function(done){
     var a = {1:2,3:4,5:6,a:{1:2}};
     mod(a, function(err, res){
       expect(res).to.be.equal('{"1":2,"3":4,"5":6,"a":{"1":2}}');
