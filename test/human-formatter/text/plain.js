@@ -2,9 +2,9 @@
  * Created by numminorihsf on 15.02.16.
  */
 var expect = require('chai').expect;
-var mod = require('../../../formatter/text/plain');
+var mod = require('../../../human-formatter/text/plain');
 
-describe('formatter/text/plain', function(){
+describe('human-formatter/text/plain', function(){
   it('return String as is', function(done){
     var a = 'asdfe sdfjkejreGERT';
     mod(a, function(err, res){
