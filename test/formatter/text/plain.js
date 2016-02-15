@@ -2,18 +2,18 @@
  * Created by numminorihsf on 15.02.16.
  */
 var expect = require('chai').expect;
-var mod = require('../../../human-formatter/application/json');
+var mod = require('../../../formatter/text/plain');
 
-describe('human-formatter/application/json', function(){
-  it('wrap String to JSON', function(done){
+describe('formatter/text/plain', function(){
+  it('return String as is', function(done){
     var a = 'asdfe sdfjkejreGERT';
     mod(a, function(err, res){
-      expect(res).to.be.equal('"asdfe sdfjkejreGERT"');
+      expect(res).to.be.equal('asdfe sdfjkejreGERT');
       done();
     });
   });
 
-  it('wrap Number to JSON', function(done){
+  it('wrap Number to String', function(done){
     var a = 100500;
     mod(a, function(err, res){
       expect(res).to.be.equal('100500');
@@ -21,15 +21,15 @@ describe('human-formatter/application/json', function(){
     });
   });
 
-  it('wrap NaN to JSON (to null)', function(done){
+  it('wrap NaN to String ("NaN")', function(done){
     var a = NaN;
     mod(a, function(err, res){
-      expect(res).to.be.equal('null');
+      expect(res).to.be.equal('NaN');
       done();
     });
   });
 
-  it('wrap Boolean to JSON', function(done){
+  it('wrap Boolean to String', function(done){
     var a = true;
     mod(a, function(err, res){
       expect(res).to.be.equal('true');
@@ -37,10 +37,10 @@ describe('human-formatter/application/json', function(){
     });
   });
 
-  it('wrap Object to JSON', function(done){
+  it('wrap Object to formatted String', function(done){
     var a = {1:2,3:4,5:6};
     mod(a, function(err, res){
-      expect(res).to.be.equal('{\n\t"1": 2,\n\t"3": 4,\n\t"5": 6\n}');
+      expect(res).to.be.equal('1:\t2\n3:\t4,\n5:\t6');
       done();
     });
   });
@@ -48,15 +48,15 @@ describe('human-formatter/application/json', function(){
   it('wrap deep Object to formatted String', function(done){
     var a = {1:2,3:4,5:6,a:{1:2}};
     mod(a, function(err, res){
-      expect(res).to.be.equal('{\n\t"1": 2,\n\t"3": 4,\n\t"5": 6,\n\t"a": {\n\t\t"1": 2\n\t}\n}');
+      expect(res).to.be.equal('1:\t2,\n3:\t4,\n5:\t6,a:\t1:\n\t2');
       done();
     });
   });
 
-  it('wrap Array to JSON', function(done){
+  it('wrap Array to formatted String', function(done){
     var a = [1,2,3,4,5,6];
     mod(a, function(err, res){
-      expect(res).to.be.equal('[\n\t1,\n\t2,\n\t3,\n\t4,\n\t5,\n\t6\n]');
+      expect(res).to.be.equal('1,\n2,\n3,\n4,\n5,\n6');
       done();
     });
   });

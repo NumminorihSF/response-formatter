@@ -69,10 +69,10 @@ describe('formatter/application/json', function(done){
     });
   });
 
-  it('pass error to callback on Function', function(done){
-    var a = function(done){};
-    mod(a, function(err){
-      expect(err).to.exist;
+  it('pass empty string to callback on Function', function(done){
+    var a = function(){};
+    mod(a, function(err, res){
+      expect(res).to.be.equal('');
       done();
     });
   });

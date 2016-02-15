@@ -6,7 +6,7 @@ module.exports = function(data, cb){
     return cb(new Error('Can format `undefined` value.'));
   }
   if (typeof data === 'function'){
-    return cb(new Error('Can not format Function value.'));
+    return cb(null, '');
   }
   var res;
   try{
