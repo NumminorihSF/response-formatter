@@ -16,5 +16,5 @@ function getFormatters (options){
   }
 }
 
-module.exports = getFormatters();
+module.exports = getFormatters;
 
