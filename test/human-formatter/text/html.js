@@ -37,53 +37,56 @@ describe('human-formatter/text/plain', function(){
     });
   });
 
-  //it('wrap Object to formatted String', function(done){
-  //  var a = {
-  //    1:2,
-  //    3:4,
-  //    5:6
-  //  };
-  //  mod(a, function(err, res){
-  //    expect(res).to.be.equal('<ul>\n' +
-  //      '\t<li>1:\t2</li>\n' +
-  //      '\t<li>3:\t4</li>\n' +
-  //      '\t<li>5:\t6</li>\n</ul>');
-  //    done();
-  //  });
-  //});
+  it('wrap Object to formatted String', function(done){
+    var a = {
+      1:2,
+      3:4,
+      5:6
+    };
+    mod(a, function(err, res){
+      expect(res).to.be.equal('<ul>\n' +
+        '\t<li>1:\t2</li>\n' +
+        '\t<li>3:\t4</li>\n' +
+        '\t<li>5:\t6</li>\n</ul>');
+      done();
+    });
+  });
 
-  //it('wrap deep Object to formatted String', function(done){
-  //  var a = {
-  //    1:2,
-  //    3:4,
-  //    5:6,
-  //    a:{
-  //      1:2,
-  //      2:3,
-  //      3:{
-  //        4:{
-  //          5:6
-  //        }
-  //      },
-  //      5:3
-  //    }
-  //  };
-  //  mod(a, function(err, res){
-  //    expect(res).to.be.equal('<ul>' +
-  //      '<li>1:\t2</li>\n' +
-  //      '<li>3:\t4\n' +
-  //      '<li>5:\t6\n' +
-  //      '<li>a:<ul>\n' +
-  //      '<li>1:\t2\n' +
-  //      '<li>2:\t3\n' +
-  //      '<li>3:<ul>\n' +
-  //      '<li>4:<ul>\n' +
-  //      '<li>5:\t6</li>' +
-  //      '</ul>\n' +
-  //      '\t5:\t3</ul></ul></li>');
-  //    done();
-  //  });
-  //});
+  it('wrap deep Object to formatted String', function(done){
+    var a = {
+      1:2,
+      3:4,
+      5:6,
+      a:{
+        1:2,
+        2:3,
+        3:{
+          4:{
+            5:6
+          }
+        },
+        5:3
+      }
+    };
+    mod(a, function(err, res){
+      expect(res).to.be.equal('<ul>\n' +
+        '\t<li>1:\t2</li>\n' +
+        '\t<li>3:\t4</li>\n' +
+        '\t<li>5:\t6</li>\n' +
+        '\t<li>a:<ul>\n' +
+        '\t\t<li>1:\t2</li>\n' +
+        '\t\t<li>2:\t3</li>\n' +
+        '\t\t<li>3:<ul>\n' +
+        '\t\t\t<li>4:<ul>\n' +
+        '\t\t\t\t<li>5:\t6</li>\n' +
+        '\t\t\t</ul></li>\n' +
+        '\t\t</ul></li>\n' +
+        '\t\t<li>5:\t3</li>\n' +
+        '\t</ul></li>\n' +
+        '</ul>');
+      done();
+    });
+  });
 
   it('wrap Array to formatted String', function(done){
     var a = [
@@ -95,14 +98,14 @@ describe('human-formatter/text/plain', function(){
       6
     ];
     mod(a, function(err, res){
-      expect(res).to.be.equal('<ul>\n'+
+      expect(res).to.be.equal('<ol>\n'+
         '\t<li>1</li>\n' +
         '\t<li>2</li>\n' +
         '\t<li>3</li>\n' +
         '\t<li>4</li>\n' +
         '\t<li>5</li>\n' +
         '\t<li>6</li>\n' +
-        '</ul>');
+        '</ol>');
       done();
     });
   });
@@ -126,23 +129,23 @@ describe('human-formatter/text/plain', function(){
       7
     ];
     mod(a, function(err, res){
-      expect(res).to.be.equal('<ul>\n' +
+      expect(res).to.be.equal('<ol>\n' +
         '\t<li>1</li>\n' +
-        '\t<li><ul>\n' +
+        '\t<li><ol>\n' +
         '\t\t<li>2</li>\n' +
-        '\t\t<li><ul>\n' +
+        '\t\t<li><ol>\n' +
         '\t\t\t<li>3</li>\n' +
-        '\t\t\t<li><ul>\n' +
+        '\t\t\t<li><ol>\n' +
         '\t\t\t\t<li>4</li>\n' +
         '\t\t\t\t<li>4</li>\n' +
         '\t\t\t\t<li>4</li>\n' +
-        '\t\t\t</ul></li>\n' +
+        '\t\t\t</ol></li>\n' +
         '\t\t\t<li>5</li>\n' +
-        '\t\t</ul></li>\n' +
+        '\t\t</ol></li>\n' +
         '\t\t<li>6</li>\n' +
-        '\t</ul></li>\n' +
+        '\t</ol></li>\n' +
         '\t<li>7</li>\n' +
-        '</ul>');
+        '</ol>');
       done();
     });
   });
