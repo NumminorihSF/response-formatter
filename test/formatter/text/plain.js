@@ -38,25 +38,102 @@ describe('formatter/text/plain', function(){
   });
 
   it('wrap Object to formatted String', function(done){
-    var a = {1:2,3:4,5:6};
+    var a = {
+      1:2,
+      3:4,
+      5:6
+    };
     mod(a, function(err, res){
-      expect(res).to.be.equal('1:\t2\n3:\t4,\n5:\t6');
+      expect(res).to.be.equal('' +
+        '1:\t2\n' +
+        '3:\t4\n' +
+        '5:\t6');
       done();
     });
   });
 
   it('wrap deep Object to formatted String', function(done){
-    var a = {1:2,3:4,5:6,a:{1:2}};
+    var a = {
+      1:2,
+      3:4,
+      5:6,
+      a:{
+        1:2,
+        2:3,
+        3:{
+          4:{
+            5:6
+          }
+        },
+        5:3
+      }
+    };
     mod(a, function(err, res){
-      expect(res).to.be.equal('1:\t2,\n3:\t4,\n5:\t6,a:\n\t1:\t2');
+      expect(res).to.be.equal('' +
+        '1:\t2\n' +
+        '3:\t4\n' +
+        '5:\t6\n' +
+        'a:\n' +
+        '\t1:\t2\n' +
+        '\t2:\t3\n' +
+        '\t3:\n' +
+        '\t\t4:\n' +
+        '\t\t5:\t6\n' +
+        '\t5:\t3');
       done();
     });
   });
 
   it('wrap Array to formatted String', function(done){
-    var a = [1,2,3,4,5,6];
+    var a = [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ];
     mod(a, function(err, res){
-      expect(res).to.be.equal('1,\n2,\n3,\n4,\n5,\n6');
+      expect(res).to.be.equal(''+
+        '1\n' +
+        '2\n' +
+        '3\n' +
+        '4\n' +
+        '5\n' +
+        '6');
+      done();
+    });
+  });
+
+  it('wrap deep Array to formatted String', function(done){
+    var a = [
+      1,
+      [
+        2,
+        [
+          3,
+          [
+            4,
+            4,
+            4
+          ],
+          5
+        ],
+        6
+      ],
+      7
+    ];
+    mod(a, function(err, res){
+      expect(res).to.be.equal('' +
+        '1\n' +
+        '\t2\n' +
+        '\t\t3\n' +
+        '\t\t\t4\n' +
+        '\t\t\t4\n' +
+        '\t\t\t4\n' +
+        '\t\t5\n' +
+        '\t6\n' +
+        '7');
       done();
     });
   });
