@@ -1,7 +1,7 @@
 /**
  * Created by numminorihsf on 15.02.16.
  */
-function getFormatters (options){
+function getFormatter (options){
   options = options || {};
   options.dataSource = options.dataSource || 'res.locals';
   var human = 'human' in options ? !!options.human : (process.env.NODE_ENV !== 'production');
@@ -16,5 +16,5 @@ function getFormatters (options){
   }
 }
 
-module.exports = getFormatters;
+module.exports = getFormatter;
 
