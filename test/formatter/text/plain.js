@@ -48,7 +48,7 @@ describe('formatter/text/plain', function(){
   it('wrap deep Object to formatted String', function(done){
     var a = {1:2,3:4,5:6,a:{1:2}};
     mod(a, function(err, res){
-      expect(res).to.be.equal('1:\t2,\n3:\t4,\n5:\t6,a:\t1:\n\t2');
+      expect(res).to.be.equal('1:\t2,\n3:\t4,\n5:\t6,a:\n\t1:\t2');
       done();
     });
   });
