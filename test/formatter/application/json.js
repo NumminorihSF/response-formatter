@@ -4,7 +4,7 @@
 var expect = require('chai').expect;
 var mod = require('../../../formatter/application/json');
 
-describe('formatter/application/json', function(done){
+describe('formatter/application/json', function(){
   it('wrap String to JSON', function(done){
     var a = 'asdfe sdfjkejreGERT';
     mod(a, function(err, res){
