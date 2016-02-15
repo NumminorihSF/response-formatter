@@ -71,12 +71,19 @@ function formatObject(data, rec){
     var localRes = recursiveFormat(data[key], true);
     if (localRes.length) {
       if (typeof data[key] === 'object'){
-        return gRes.concat([(rec ? '\t' : '') + key + ':\n'+ localRes.map(function(val){
-          return (rec ? '\t' : '') + val;
-        }).join('\n')]);
+        if (rec){
+          return gRes.concat(['\t' + key + ':\n' + localRes.map(function (val) {
+            return '\t' + val;
+          }).join('\n')]);
+        }
+        else {
+          return gRes.concat([key + ':\n' + localRes.map(function (val) {
+            return val;
+          }).join('\n')]);
+        }
       }
       else {
-        return gRes.concat([(rec ? '\t' : '') + key + ':\t'+ localRes.join(',\n')]);
+        return gRes.concat([(rec ? '\t' : '') + key + ':\t'+ localRes.join('\n')]);
       }
     }
     return gRes;
