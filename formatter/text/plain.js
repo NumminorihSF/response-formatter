@@ -57,8 +57,7 @@ function recursiveFormat (data, rec){
       return formatArray(data, rec);
     }
     else {
-
-      if (data.toString === Object.toString){
+      if (data.toString === Object.prototype.toString){
         return formatObject(data, rec);
       }
       return [(rec ? '\t': '') + data.toString()];
