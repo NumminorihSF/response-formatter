@@ -17,8 +17,15 @@ function getFormatter (options){
 
   options.fallback = options.formats[0];
 
-  return function(req, res, next){
+  var getData = function (path, allData){
+    return path.reduce(function(result, key){
+      return result[key];
+    }, allData);
+  }.bind(this, options.dataSource.split('.'));
 
+  return function(req, res, next){
+    var format = req.accepts(options.formats) || options.fallback;
+    return formatter[format](getData({req: req, res: res, request: req, response: res}), next);
   }
 }
 
