@@ -2,7 +2,7 @@
  * Created by numminorihsf on 15.02.16.
  */
 var expect = require('chai').expect;
-var mod = require('../../../formatter/application/json');
+var mod = require('../../../human-formatter/application/json');
 
 describe('formatter/application/json', function(){
   it('wrap String to JSON', function(){
@@ -29,14 +29,14 @@ describe('formatter/application/json', function(){
   it('wrap Object to JSON', function(){
     var a = {1:2,3:4,5:6};
     mod(a, function(err, res){
-      expect(res).to.be.equal('{"1":2,"3":4,"5":6}');
+      expect(res).to.be.equal('{\n\t"1": 2,\n\t"3": 4,\n\t"5": 6\n}');
     });
   });
 
   it('wrap Array to JSON', function(){
     var a = [1,2,3,4,5,6];
     mod(a, function(err, res){
-      expect(res).to.be.equal('[1,2,3,4,5,6]');
+      expect(res).to.be.equal('[\n\t1,\n\t2,\n\t3,\n\t4,\n\t5,\n\t6\n]');
     });
   });
 
