@@ -170,6 +170,49 @@ describe('formatter/text/plain', function(){
     });
   });
 
+  it('wrap deep Object in Array to String', function(done){
+    var a = [1,{a:1,b:2,c:{d:4}}];
+    mod(a, function(err, res){
+      expect(res).to.be.equal('<ol>' +
+        '<li><code>1</code></li>' +
+        '<li><ul>' +
+        '<li>a:<code>1</code></li>' +
+        '<li>b:<code>2</code></li>' +
+        '<li>c:<ul>' +
+        '<li>d:<code>4</code></li>' +
+        '</ul></li>' +
+        '</ul></li>' +
+        '</ol>');
+      done();
+    });
+  });
+
+
+  it('wrap deep Array in Object to String', function(done){
+    var a = {a:1,b:[1,2,[3]]};
+    mod(a, function(err, res){
+      expect(res).to.be.equal('<ul>' +
+        '<li>a:<code>1</code></li>' +
+        '<li>b:<ol>' +
+        '<li><code>1</code></li>' +
+        '<li><code>2</code></li>' +
+        '<li><ol>' +
+        '<li><code>3</code></li>' +
+        '</ol></li>' +
+        '</ol></li>' +
+        '</ul>');
+      done();
+    });
+  });
+
+  it('wrap Object with custom #toString method to String', function(done){
+    var a = new A();
+    mod(a, function(err, res){
+      expect(res).to.be.equal('<pre>ASDFjkvcren,rt 12348gvf4</pre>');
+      done();
+    });
+  });
+
   it('wrap null to formatted String', function(done){
     var a = null;
     mod(a, function(err, res){

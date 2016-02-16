@@ -4,6 +4,9 @@
 var expect = require('chai').expect;
 var mod = require('../../../formatter/text/plain');
 
+function A(){}
+A.prototype.toString = function(){return 'ASDFjkvcren,rt 12348gvf4'};
+
 describe('formatter/text/plain', function(){
   it('return String as is', function(done){
     var a = 'asdfe sdfjkejreGERT';
@@ -21,7 +24,7 @@ describe('formatter/text/plain', function(){
     });
   });
 
-  it('wrap NaN to String ("NaN")', function(done){
+  it('wrap NaN to String("NaN")', function(done){
     var a = NaN;
     mod(a, function(err, res){
       expect(res).to.be.equal('NaN');
@@ -40,20 +43,22 @@ describe('formatter/text/plain', function(){
   it('wrap Object to formatted String', function(done){
     var a = {
       1:2,
-      3:4,
-      5:6,
+      3:"4",
+      5:false,
       6:function(){},
       7:undefined,
-      8:true,
-      9:false
+      8:new A(),
+      9:null
     };
     mod(a, function(err, res){
       expect(res).to.be.equal('' +
         '1: 2\n' +
         '3: 4\n' +
-        '5: 6\n' +
-        '8: true\n' +
-        '9: false');
+        '5: false\n' +
+        '6:\n' +
+        '7:\n' +
+        '8: ASDFjkvcren,rt 12348gvf4\n' +
+        '9: null');
       done();
     });
   });
@@ -84,33 +89,41 @@ describe('formatter/text/plain', function(){
         ' 2: 3\n' +
         ' 3:\n' +
         '  4:\n' +
-        '  5: 6\n' +
+        '   5: 6\n' +
         ' 5: 3');
       done();
     });
   });
 
   it('wrap Array to formatted String', function(done){
+    function A(){}
+    A.prototype.toString = function(){return 'ASDFjkvcren,rt 12348gvf4'};
     var a = [
       1,
-      2,
-      3,
+      "2",
+      true,
       4,
-      5,
-      6
+      undefined,
+      new A(),
+      function(){},
+      6,
+      null
     ];
     mod(a, function(err, res){
       expect(res).to.be.equal(''+
         '1\n' +
         '2\n' +
-        '3\n' +
+        'true\n' +
         '4\n' +
-        '5\n' +
-        '6');
+        '\n' +
+        'ASDFjkvcren,rt 12348gvf4\n' +
+        '\n' +
+        '6\n' +
+        'null');
       done();
     });
   });
-
+  
   it('wrap deep Array to formatted String', function(done){
     var a = [
       1,
@@ -144,39 +157,35 @@ describe('formatter/text/plain', function(){
     });
   });
 
-  it('wrap Object with custom #toString() to String', function(done){
-    function A(){}
-    A.prototype.toString = function(){
-      return 'blalbalba';
-    };
-    var a = {1: new A()};
-    mod(a, function(err, res){
-      expect(res).to.be.equal('1: blalbalba');
-      done();
-    });
-  });
-
-
-  it('wrap Object with null to String', function(done){
-    var a = {1:null};
-    mod(a, function(err, res){
-      expect(res).to.be.equal('1: null');
-      done();
-    });
-  });
-
-  it('wrap deep Object with null to String', function(done){
-    var a = {1:{2:null}};
-    mod(a, function(err, res){
-      expect(res).to.be.equal('1:\n 2: null');
-      done();
-    });
-  });
-
-  it('wrap null to String', function(done){
+  it('wrap null to formatted String', function(done){
     var a = null;
     mod(a, function(err, res){
       expect(res).to.be.equal('null');
+      done();
+    });
+  });
+
+  it('wrap Object with custom #toString method to String', function(done){
+    var a = new A();
+    mod(a, function(err, res){
+      expect(res).to.be.equal('ASDFjkvcren,rt 12348gvf4');
+      done();
+    });
+  });
+
+  it('wrap deep Object in Array to String', function(done){
+    var a = [1,{a:1,b:2,c:{d:4}}];
+    mod(a, function(err, res){
+      expect(res).to.be.equal('1\na: 1\nb: 2\nc:\n d: 4');
+      done();
+    });
+  });
+
+
+  it('wrap deep Array in Object to String', function(done){
+    var a = {a:1,b:[1,2,[3]]};
+    mod(a, function(err, res){
+      expect(res).to.be.equal('a: 1\nb:\n 1\n 2\n  3');
       done();
     });
   });
