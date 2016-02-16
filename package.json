@@ -1,7 +1,7 @@
 {
   "name": "response-formatter",
   "version": "1.0.0",
-  "description": "Format response to",
+  "description": "An express.js middleware to format your response from server to format, that client waits.",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/_mocha --recursive",
@@ -21,7 +21,8 @@
     "json",
     "application/json",
     "text/plain",
-    "text/html"
+    "text/html",
+    "midleware"
   ],
   "author": "Konstantine Petryaev <numminorihsf@gmail.com>",
   "license": "MIT",
