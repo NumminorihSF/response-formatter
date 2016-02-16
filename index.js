@@ -36,7 +36,7 @@ function getFormatter (options){
 
   options.dataSource = options.dataSource || 'res.locals';
   options.dataDestination = options.dataDestination || 'res.sentData';
-  options.formats = options.formats || ['application/json', 'text/xml', 'text/plain'];//TODO 'text/html'
+  options.formats = options.formats || ['application/json', 'text/xml', 'text/html', 'text/plain'];
   options.formats.forEach(function(format){
     //TODO user formatters
     if (human) formatter[format] = require('./human-formatter/'+format);
