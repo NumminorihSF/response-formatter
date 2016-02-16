@@ -19,7 +19,7 @@ function getDataFromObject (path, sources, callback){
 }
 
 function putDataIntoObject (path, destinations, data){
-  var lastKey = destinations.pop();
+  var lastKey = path.pop();
   var destObject = path.reduce(function(result, key){
     if (!(key in result)) result[key] = {};
     return result[key];
@@ -36,10 +36,19 @@ function getFormatter (options){
 
   options.dataSource = options.dataSource || 'res.locals';
   options.dataDestination = options.dataDestination || 'res.sentData';
-  options.formats = options.formats || ['application/json', 'text/xml', 'text/html', 'text/plain'];
+  if (options.formats instanceof Array){
+    if (!options.formats.length){
+      options.formats = ['application/json', 'text/xml', 'text/html', 'text/plain'];
+    }
+  }
+  else {
+    options.formats = ['application/json', 'text/xml', 'text/html', 'text/plain'];
+  }
+
+  options.userFormatters = options.userFormatters || {};
   options.formats.forEach(function(format){
-    //TODO user formatters
-    if (human) formatter[format] = require('./human-formatter/'+format);
+    if (options.userFormatters[format]) formatter[format] = options.userFormatters[format];
+    else if (human) formatter[format] = require('./human-formatter/'+format);
     else formatter[format] = require('./formatter/'+format);
   });
 
@@ -60,7 +69,6 @@ function getFormatter (options){
         return next();
       });
     });
-
   }
 }
 
