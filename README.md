@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/NumminorihSF/response-formatter.svg?branch=master)](https://travis-ci.org/NumminorihSF/response-formatter)
-[![Coverage Status](https://coveralls.io/repos/NumminorihSF/response-formatter/badge.svg?branch=master&service=github)](https://coveralls.io/github/NumminorihSF/response-formatter?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/NumminorihSF/response-formatter/badge.svg?branch=master)](https://coveralls.io/github/NumminorihSF/response-formatter?branch=master)
 
 # Response formatter
 
