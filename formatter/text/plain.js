@@ -1,25 +1,26 @@
 /**
  * Created by numminorihsf on 15.02.16.
  */
+
 var formats = {
   string: function(data, cb){
-    return cb(null, data);
+    return cb(null, syncWrapper.string(data));
   },
   number: function(data, cb){
-    return cb(null, data.toString());
+    return cb(null, syncWrapper.number(data));
   },
   boolean: function(data, cb){
-    return cb(null, data ? 'true' : 'false');
+    return cb(null, syncWrapper.boolean(data));
   },
   "function": function(data, cb){
-    return cb(null, '');
+    return cb(null, syncWrapper.function(data));
   },
   "undefined": function(data, cb){
     return cb(new Error('Can not format `undefined` value.'));
   },
   "object": function(data, cb){
     if (data === null){
-      return cb(null, 'null');
+      return cb(null, syncWrapper.null());
     }
     try{
       JSON.stringify(data);
@@ -27,77 +28,98 @@ var formats = {
     catch(e){
       return cb(e);
     }
-    return cb(null, recursiveFormat(data).join('\n'));
+    if (data instanceof Array){
+      return cb(null, syncWrapper.array(data));
+    }
+    if (data.toString === Object.prototype.toString) return cb(null,syncWrapper.object(data));
+    return cb(null, data.toString());
   }
 };
+
+var syncWrapper = {
+  string: function(data){
+    return data;
+  },
+  number: function(data){
+    return data.toString();
+  },
+  boolean: function(data){
+    return (data ? 'true' : 'false');
+  },
+  "function": function(){
+    return '';
+  },
+  "undefined": function(){
+    return '';
+  },
+  "null": function(){
+    return 'null';
+  },
+  "array": function(data, rec){
+    rec = rec || 0;
+    var prefix = '';
+    var i = rec;
+    while (i-- > 0){
+      prefix += ' ';
+    }
+    return data.map(function(val){
+        var type = typeof val;
+
+        switch (type) {
+          case 'string':
+            return prefix + syncWrapper.string(val);
+          case 'number':
+            return prefix + syncWrapper.number(val);
+          case 'boolean':
+            return prefix + syncWrapper.boolean(val);
+          case 'function':
+            return prefix + syncWrapper.function(val);
+          case 'undefined':
+            return prefix + syncWrapper.undefined(val);
+          default:
+            if (val === null) return prefix + syncWrapper.null(val);
+            if (val instanceof Array) return syncWrapper.array(val, rec+1);
+            if (val.toString === Object.prototype.toString) return syncWrapper.object(val, rec);
+            return prefix + val.toString();
+        }
+      }).join('\n');
+  },
+  "object": function(data, rec){
+    rec = rec || 0;
+    var prefix = '';
+    var i = rec;
+    while (i-- > 0){
+      prefix += ' ';
+    }
+    return Object.keys(data).map(function(key){
+        var val = data[key];
+        var type = typeof val;
+        switch (type) {
+          case 'string':
+            return prefix + key + ': ' + syncWrapper.string(val);
+          case 'number':
+            return prefix + key + ': ' + syncWrapper.number(val);
+          case 'boolean':
+            return prefix + key + ': ' + syncWrapper.boolean(val);
+          case 'function':
+            //return [key]:\n
+            return prefix + key + ':';
+          case 'undefined':
+            //return [key]:\n
+            return prefix + key + ':';
+          default:
+            if (val === null) return prefix + key + ': ' + syncWrapper.null(val);
+            if (val instanceof Array) return prefix  + key + ':\n' + syncWrapper.array(val, rec+1);
+            if (val.toString === Object.prototype.toString) return prefix  + key + ':\n' + syncWrapper.object(val, rec+1);
+            return prefix  + key + ': ' + val.toString();
+        }
+      }).join('\n');
+  }
+};
+
 
 module.exports = function(data, cb){
   var type = typeof data;
   formats[type](data, cb);
 };
 
-//возвращает из себя массив строк
-function recursiveFormat (data, rec){
-  var type = typeof data;
-  if (type === 'function'){
-    return [];
-  }
-  if (type === 'boolean'){
-    return [data?'true':'false'];
-  }
-  if (type === 'undefined'){
-    return [];
-  }
-
-  if (type === 'object'){
-    if (data === null){
-      return ['null'];
-    }
-    else if (data instanceof Array){
-      return formatArray(data, rec);
-    }
-    else {
-      if (data.toString === Object.prototype.toString){
-        return formatObject(data, rec);
-      }
-      return [(rec ? '\t': '') + data.toString()];
-    }
-  }
-  return [data.toString()];
-}
-
-function formatObject(data, rec){
-  return Object.keys(data).reduce(function(gRes, key){
-    var localRes = recursiveFormat(data[key], true);
-    if (localRes.length) {
-      if (typeof data[key] === 'object'){
-        if (rec){
-          return gRes.concat(['\t' + key + ':\n' + localRes.map(function (val) {
-            return '\t' + val;
-          }).join('\n')]);
-        }
-        else {
-          return gRes.concat([key + ':\n' + localRes.map(function (val) {
-            return val;
-          }).join('\n')]);
-        }
-      }
-      else {
-        return gRes.concat([(rec ? '\t' : '') + key + ':\t'+ localRes.join('\n')]);
-      }
-    }
-    return gRes;
-  }, []);
-}
-
-function formatArray(data, rec){
-  return data.reduce(function(gRes, val){
-    var localRes = recursiveFormat(val, true);
-    if (localRes.length) {
-      return gRes.concat(localRes.map(function(val){
-        return (rec ? '\t' : '') + val
-      }));
-    }
-    return gRes;
-  }, []);
-}
