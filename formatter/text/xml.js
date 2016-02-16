@@ -20,6 +20,5 @@ module.exports = function(data, cb){
   if (data === null){
     return cb(null, builder.buildObject(''));
   }
-  var res = builder.buildObject(data);
-  return cb(null, res);
+  return cb(null, builder.buildObject(data));
 };
