@@ -44,7 +44,7 @@ that module will get `res.locals` and try to returning it as result after some w
 * `.formats` _String[]_ - Available formats to returning response. Default `['application/json', 'text/xml', 'text/html', 'text/plain']`.
 If is empty array, use default. First format is also used as fallback if client want unexpected format.
 * `.userFormatters` _Object_ - Object with user functions to format response data. Default `{}`.
-  * First argument in an data, that module got from data source.
+  * First argument is an data, that module got from data source.
   * Second arguments is an callback function. Callback wait error object on 1st, and result on 2nd argument.
 
 
