@@ -4,7 +4,49 @@
 # Response formatter
 
 This is an express.js middleware to format your response from server to format, that client waits.
+
+Basic, it can returns json, plain text, xml and html.
+
+On recursive objects it will return `next(errorObject)`.
  
+## Install
+
+```sh
+npm install --save response-formatter
+```
+
+## Usage
+
+Simple example:
+
+```js
+  //app - instance on express application
+  var resForm = require('response-formatter');
+  
+  app.use(resForm());
+```
+
+### Options
+
+You can pass options into `resForm()` call.
+
+Options is an Object with unnecessary fields:
+
+* `.human` _Boolean_ - Need prettify result or not. Default: calc by `process.env.NODE_ENV==="production"`.
+* `.dataSource` _String_ - Path on object, were output data exist. Default: `'res.locals'`. It means, 
+that module will get `res.locals` and try to returning it as result after some work.
+  * You can use `'req'` or `'request'` as request object link.
+  * You can use `'res'` or `'response'` as response object link.
+  * If no such route in object, module will return error to express.
+* `.dataDestination` _String_ - Path on object, to put result data. Default `'res.sentData'`.
+  * Linking to object is like on `.dataSource`
+  * If no such route in object, module will create it.
+* `.formats` _String[]_ - Available formats to returning response. Default `['application/json', 'text/xml', 'text/html', 'text/plain']`.
+If is empty array, use default. First format is also used as fallback if client want unexpected format.
+* `.userFormatters` _Object_ - Object with user functions to format response data. Default `{}`.
+  * First argument in an data, that module got from data source.
+  * Second arguments is an callback function. Callback wait error object on 1st, and result on 2nd argument.
+
 
 ## Test
 
