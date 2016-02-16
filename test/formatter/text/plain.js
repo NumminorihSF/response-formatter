@@ -41,13 +41,19 @@ describe('formatter/text/plain', function(){
     var a = {
       1:2,
       3:4,
-      5:6
+      5:6,
+      6:function(){},
+      7:undefined,
+      8:true,
+      9:false
     };
     mod(a, function(err, res){
       expect(res).to.be.equal('' +
-        '1:\t2\n' +
-        '3:\t4\n' +
-        '5:\t6');
+        '1: 2\n' +
+        '3: 4\n' +
+        '5: 6\n' +
+        '8: true\n' +
+        '9: false');
       done();
     });
   });
@@ -70,16 +76,16 @@ describe('formatter/text/plain', function(){
     };
     mod(a, function(err, res){
       expect(res).to.be.equal('' +
-        '1:\t2\n' +
-        '3:\t4\n' +
-        '5:\t6\n' +
+        '1: 2\n' +
+        '3: 4\n' +
+        '5: 6\n' +
         'a:\n' +
-        '\t1:\t2\n' +
-        '\t2:\t3\n' +
-        '\t3:\n' +
-        '\t\t4:\n' +
-        '\t\t5:\t6\n' +
-        '\t5:\t3');
+        ' 1: 2\n' +
+        ' 2: 3\n' +
+        ' 3:\n' +
+        '  4:\n' +
+        '  5: 6\n' +
+        ' 5: 3');
       done();
     });
   });
@@ -126,19 +132,48 @@ describe('formatter/text/plain', function(){
     mod(a, function(err, res){
       expect(res).to.be.equal('' +
         '1\n' +
-        '\t2\n' +
-        '\t\t3\n' +
-        '\t\t\t4\n' +
-        '\t\t\t4\n' +
-        '\t\t\t4\n' +
-        '\t\t5\n' +
-        '\t6\n' +
+        ' 2\n' +
+        '  3\n' +
+        '   4\n' +
+        '   4\n' +
+        '   4\n' +
+        '  5\n' +
+        ' 6\n' +
         '7');
       done();
     });
   });
 
-  it('wrap null to JSON', function(done){
+  it('wrap Object with custom #toString() to String', function(done){
+    function A(){}
+    A.prototype.toString = function(){
+      return 'blalbalba';
+    };
+    var a = {1: new A()};
+    mod(a, function(err, res){
+      expect(res).to.be.equal('1: blalbalba');
+      done();
+    });
+  });
+
+
+  it('wrap Object with null to String', function(done){
+    var a = {1:null};
+    mod(a, function(err, res){
+      expect(res).to.be.equal('1: null');
+      done();
+    });
+  });
+
+  it('wrap deep Object with null to String', function(done){
+    var a = {1:{2:null}};
+    mod(a, function(err, res){
+      expect(res).to.be.equal('1:\n 2: null');
+      done();
+    });
+  });
+
+  it('wrap null to String', function(done){
     var a = null;
     mod(a, function(err, res){
       expect(res).to.be.equal('null');
