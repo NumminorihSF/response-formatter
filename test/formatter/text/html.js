@@ -8,7 +8,7 @@ describe('formatter/text/plain', function(){
   it('return String as is', function(done){
     var a = 'asdfe sdfjkejreGERT';
     mod(a, function(err, res){
-      expect(res).to.be.equal('<ul><li>asdfe sdfjkejreGERT</li></ul>');
+      expect(res).to.be.equal('<span>asdfe sdfjkejreGERT</span>');
       done();
     });
   });
@@ -16,7 +16,7 @@ describe('formatter/text/plain', function(){
   it('wrap Number to String', function(done){
     var a = 100500;
     mod(a, function(err, res){
-      expect(res).to.be.equal('<ul><li>100500</li></ul>');
+      expect(res).to.be.equal('<code>100500</code>');
       done();
     });
   });
@@ -24,7 +24,7 @@ describe('formatter/text/plain', function(){
   it('wrap NaN to String ("NaN")', function(done){
     var a = NaN;
     mod(a, function(err, res){
-      expect(res).to.be.equal('<ul><li>NaN</li></ul>');
+      expect(res).to.be.equal('<code>NaN</code>');
       done();
     });
   });
@@ -32,7 +32,7 @@ describe('formatter/text/plain', function(){
   it('wrap Boolean to String', function(done){
     var a = true;
     mod(a, function(err, res){
-      expect(res).to.be.equal('<ul><li>true</li></ul>');
+      expect(res).to.be.equal('<mark>true</mark>');
       done();
     });
   });
@@ -40,14 +40,14 @@ describe('formatter/text/plain', function(){
   it('wrap Object to formatted String', function(done){
     var a = {
       1:2,
-      3:4,
-      5:6
+      3:"4",
+      5:false
     };
     mod(a, function(err, res){
       expect(res).to.be.equal('<ul>' +
-        '<li>1:2</li>' +
-        '<li>3:4</li>' +
-        '<li>5:6</li></ul>');
+        '<li>1:<code>2</code></li>' +
+        '<li>3:<span>4</span></li>' +
+        '<li>5:<mark>false</mark></li></ul>');
       done();
     });
   });
@@ -91,20 +91,20 @@ describe('formatter/text/plain', function(){
   it('wrap Array to formatted String', function(done){
     var a = [
       1,
-      2,
-      3,
+      "2",
+      true,
       4,
       5,
       6
     ];
     mod(a, function(err, res){
       expect(res).to.be.equal('<ol>'+
-        '<li>1</li>' +
-        '<li>2</li>' +
-        '<li>3</li>' +
-        '<li>4</li>' +
-        '<li>5</li>' +
-        '<li>6</li>' +
+        '<li><code>1</code></li>' +
+        '<li><span>2</span></li>' +
+        '<li><mark>true</mark></li>' +
+        '<li><code>4</code></li>' +
+        '<li><code>5</code></li>' +
+        '<li><code>6</code></li>' +
         '</ol>');
       done();
     });
