@@ -7,7 +7,7 @@ var mod = require('../../../formatter/text/html');
 function A(){}
 A.prototype.toString = function(){return 'ASDFjkvcren,rt 12348gvf4'};
 
-describe('formatter/text/plain', function(){
+describe('formatter/text/html', function(){
   it('return String wrapped to <span/>', function(done){
     var a = 'asdfe sdfjkejreGERT';
     mod(a, function(err, res){
