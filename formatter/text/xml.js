@@ -3,19 +3,8 @@
  */
 var xml2js = require('xml2js');
 var builder = new xml2js.Builder({renderOpts: {pretty: false}});
-var validate = require('../../both-formatter/text/xml');
+var formatter = require('../../both-formatter/text/xml')(builder);
 
 module.exports = function(data, cb){
-  validate(data, function(err){
-    if (err){
-      return cb(err);
-    }
-    if (typeof data === 'function'){
-      return cb(null, builder.buildObject(''));
-    }
-    if (data === null){
-      return cb(null, builder.buildObject(''));
-    }
-    return cb(null, builder.buildObject(data));
-  });
+  formatter(data, cb);
 };
