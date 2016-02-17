@@ -56,49 +56,51 @@ var syncWrapper = {
     return '<strong>null</strong>';
   },
   "array": function(data){
-    return '<ol>'+data.map(function(val){
-        var type = typeof val;
-        switch (type) {
-          case 'string':
-            return '<li>' + syncWrapper.string(val) + '</li>';
-          case 'number':
-            return '<li>' + syncWrapper.number(val) + '</li>';
-          case 'boolean':
-            return '<li>' + syncWrapper.boolean(val) + '</li>';
-          case 'function':
-            return '<li>' + syncWrapper.function(val) + '</li>';
-          case 'undefined':
-            return '<li>' + syncWrapper.undefined(val) + '</li>';
-          default:
-            if (val === null) return '<li>' + syncWrapper.null(val) + '</li>';
-            if (val instanceof Array) return '<li>' + syncWrapper.array(val) + '</li>';
-            if (val.toString === Object.prototype.toString) return '<li>' + syncWrapper.object(val) + '</li>';
-            return '<li>' + '<pre>' + val.toString() + '</pre>' + '</li>';
-        }
-      }).join('')+'</ol>';
+    var arrayMap = data.map(function(val){
+      var type = typeof val;
+      switch (type) {
+        case 'string':
+          return '<li>' + syncWrapper.string(val) + '</li>';
+        case 'number':
+          return '<li>' + syncWrapper.number(val) + '</li>';
+        case 'boolean':
+          return '<li>' + syncWrapper.boolean(val) + '</li>';
+        case 'function':
+          return '<li>' + syncWrapper.function(val) + '</li>';
+        case 'undefined':
+          return '<li>' + syncWrapper.undefined(val) + '</li>';
+        default:
+          if (val === null) return '<li>' + syncWrapper.null(val) + '</li>';
+          if (val instanceof Array) return '<li>' + syncWrapper.array(val) + '</li>';
+          if (val.toString === Object.prototype.toString) return '<li>' + syncWrapper.object(val) + '</li>';
+          return '<li><pre>' + val.toString() + '</pre></li>';
+      }
+    }).join('');
+    return '<ol>'+arrayMap+'</ol>';
   },
   "object": function(data){
-    return '<ul>'+Object.keys(data).map(function(key){
-        var val = data[key];
-        var type = typeof val;
-        switch (type) {
-          case 'string':
-            return '<li>' + key + ':' + syncWrapper.string(val) + '</li>';
-          case 'number':
-            return '<li>' + key + ':' + syncWrapper.number(val) + '</li>';
-          case 'boolean':
-            return '<li>' + key + ':' + syncWrapper.boolean(val) + '</li>';
-          case 'function':
-            return '<li>' + key + ':' + syncWrapper.function(val) + '</li>';
-          case 'undefined':
-            return '<li>' + key + ':' + syncWrapper.undefined(val) + '</li>';
-          default:
-            if (val === null) return '<li>' + key + ':' + syncWrapper.null(val) + '</li>';
-            if (val instanceof Array) return '<li>' + key + ':' + syncWrapper.array(val) + '</li>';
-            if (val.toString === Object.prototype.toString) return '<li>' + key + ':' + syncWrapper.object(val) + '</li>';
-            return '<li>' + key + ':' + '<pre>' + val.toString() + '</pre>' + '</li>';
-        }
-      }).join('')+'</ul>';
+    var objectMap = Object.keys(data).map(function(key){
+      var val = data[key];
+      var type = typeof val;
+      switch (type) {
+        case 'string':
+          return '<li>' + key + ':' + syncWrapper.string(val) + '</li>';
+        case 'number':
+          return '<li>' + key + ':' + syncWrapper.number(val) + '</li>';
+        case 'boolean':
+          return '<li>' + key + ':' + syncWrapper.boolean(val) + '</li>';
+        case 'function':
+          return '<li>' + key + ':' + syncWrapper.function(val) + '</li>';
+        case 'undefined':
+          return '<li>' + key + ':' + syncWrapper.undefined(val) + '</li>';
+        default:
+          if (val === null) return '<li>' + key + ':' + syncWrapper.null(val) + '</li>';
+          if (val instanceof Array) return '<li>' + key + ':' + syncWrapper.array(val) + '</li>';
+          if (val.toString === Object.prototype.toString) return '<li>' + key + ':' + syncWrapper.object(val) + '</li>';
+          return '<li>' + key + ':<pre>' + val.toString() + '</pre></li>';
+      }
+    }).join('');
+    return '<ul>' + objectMap + '</ul>';
   }
 };
 
