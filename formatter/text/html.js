@@ -2,40 +2,6 @@
  * Created by numminorihsf on 15.02.16.
  */
 
-var formats = {
-  string: function(data, cb){
-    return cb(null, syncWrapper.string(data));
-  },
-  number: function(data, cb){
-    return cb(null, syncWrapper.number(data));
-  },
-  boolean: function(data, cb){
-    return cb(null, syncWrapper.boolean(data));
-  },
-  "function": function(data, cb){
-    return cb(null, syncWrapper.function(data));
-  },
-  "undefined": function(data, cb){
-    return cb(new Error('Can not format `undefined` value.'));
-  },
-  "object": function(data, cb){
-    if (data === null){
-      return cb(null, syncWrapper.null());
-    }
-    try{
-      JSON.stringify(data);
-    }
-    catch(e){
-      return cb(e);
-    }
-    if (data instanceof Array){
-      return cb(null, syncWrapper.array(data));
-    }
-    if (data.toString === Object.prototype.toString) return cb(null,syncWrapper.object(data));
-    return cb(null, '<pre>'+data.toString()+'</pre>');
-  }
-};
-
 var syncWrapper = {
   string: function(data){
     return '<span>'+data+'</span>';
@@ -104,6 +70,7 @@ var syncWrapper = {
   }
 };
 
+var formats = require('../../both-formatter/text/html')(syncWrapper);
 
 module.exports = function(data, cb){
   var type = typeof data;
