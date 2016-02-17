@@ -2,6 +2,20 @@
  * Created by numminorihsf on 15.02.16.
  */
 
+function mapObjectFromArray(prefix, val, rec){
+  if (val === null) return prefix + syncWrapper.null(val);
+  if (val instanceof Array) return syncWrapper.array(val, rec+1);
+  if (val.toString === Object.prototype.toString) return syncWrapper.object(val, rec);
+  return prefix + val.toString();
+}
+
+function mapObjectFromObject(prefix, key, val, rec){
+  if (val === null) return prefix + key + ': ' + syncWrapper.null(val);
+  if (val instanceof Array) return prefix  + key + ':\n' + syncWrapper.array(val, rec+1);
+  if (val.toString === Object.prototype.toString) return prefix  + key + ':\n' + syncWrapper.object(val, rec+1);
+  return prefix  + key + ': ' + val.toString();
+}
+
 var formats = {
   string: function(data, cb){
     return cb(null, syncWrapper.string(data));
@@ -77,10 +91,7 @@ var syncWrapper = {
           case 'undefined':
             return prefix + syncWrapper.undefined(val);
           default:
-            if (val === null) return prefix + syncWrapper.null(val);
-            if (val instanceof Array) return syncWrapper.array(val, rec+1);
-            if (val.toString === Object.prototype.toString) return syncWrapper.object(val, rec);
-            return prefix + val.toString();
+            return mapObjectFromArray(prefix, val, rec);
         }
       }).join('\n');
   },
@@ -108,10 +119,7 @@ var syncWrapper = {
             //return [key]:\n
             return prefix + key + ':';
           default:
-            if (val === null) return prefix + key + ': ' + syncWrapper.null(val);
-            if (val instanceof Array) return prefix  + key + ':\n' + syncWrapper.array(val, rec+1);
-            if (val.toString === Object.prototype.toString) return prefix  + key + ':\n' + syncWrapper.object(val, rec+1);
-            return prefix  + key + ': ' + val.toString();
+            return mapObjectFromObject(prefix, key, val, rec);
         }
       }).join('\n');
   }
