@@ -82,10 +82,10 @@ var syncWrapper = {
           if (val === null) return prefix + '<li>' + key + ':' + syncWrapper.null(val) + '</li>';
           if (val instanceof Array) return prefix + '<li>' + key + ':' + syncWrapper.array(val, rec+1) + '</li>';
           if (val.toString === Object.prototype.toString) return prefix + '<li>' + key + ':' + syncWrapper.object(val, rec+1) + '</li>';
-          return prefix + '<li>' + key + ':<pre>' + val.toString() + '</pre>' + '</li>';
+          return prefix + '<li>' + key + ':<pre>' + val.toString() + '</pre></li>';
       }
     }).join('\n');
-    return '<ol>\n'+xarrayMap+'\n' + lastPre+ '</ol>';
+    return '<ol>\n' + arrayMap + '\n' + lastPre+ '</ol>';
   },
   "object": function(data, rec){
     rec = rec || 1;
@@ -117,7 +117,7 @@ var syncWrapper = {
           return prefix + '<li>' + key + ':<pre>' + val.toString() + '</pre></li>';
       }
     }).join('\n');
-    return '<ul>\n'+objectMap+'\n' + lastPre + '</ul>';
+    return '<ul>\n' + objectMap + '\n' + lastPre + '</ul>';
   }
 };
 
