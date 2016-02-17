@@ -2,6 +2,7 @@
  * Created by numminorihsf on 15.02.16.
  */
 
+
 var syncWrapper = {
   string: function(data){
     return '<span>'+data+'</span>';
@@ -30,25 +31,24 @@ var syncWrapper = {
       lastPre = prefix;
       prefix += ' ';
     }
-    var arrayMap = Object.keys(data).map(function(key){
-      var val = data[key];
+    var arrayMap = data.map(function(val){
       var type = typeof val;
       switch (type) {
         case 'string':
-          return prefix + '<li>' + key + ':' + syncWrapper.string(val) + '</li>';
+          return prefix + '<li>' + syncWrapper.string(val) + '</li>';
         case 'number':
-          return prefix + '<li>' + key + ':' + syncWrapper.number(val) + '</li>';
+          return prefix + '<li>' + syncWrapper.number(val) + '</li>';
         case 'boolean':
-          return prefix + '<li>' + key + ':' + syncWrapper.boolean(val) + '</li>';
+          return prefix + '<li>' + syncWrapper.boolean(val) + '</li>';
         case 'function':
-          return prefix + '<li>' + key + ':' + syncWrapper.function(val) + '</li>';
+          return prefix + '<li>' + syncWrapper.function(val) + '</li>';
         case 'undefined':
-          return prefix + '<li>' + key + ':' + syncWrapper.undefined(val) + '</li>';
+          return prefix + '<li>' + syncWrapper.undefined(val) + '</li>';
         default:
-          if (val === null) return prefix + '<li>' + key + ':' + syncWrapper.null(val) + '</li>';
-          if (val instanceof Array) return prefix + '<li>' + key + ':' + syncWrapper.array(val, rec+1) + '</li>';
-          if (val.toString === Object.prototype.toString) return prefix + '<li>' + key + ':' + syncWrapper.object(val, rec+1) + '</li>';
-          return prefix + '<li>' + key + ':<pre>' + val.toString() + '</pre></li>';
+          if (val === null) return prefix + '<li>' + syncWrapper.null(val) + '</li>';
+          if (val instanceof Array) return prefix + '<li>' + syncWrapper.array(val, rec+1) + '</li>';
+          if (val.toString === Object.prototype.toString) return prefix + '<li>' + syncWrapper.object(val, rec+1) + '</li>';
+          return prefix + '<li><pre>' + val.toString() + '</pre></li>';
       }
     }).join('\n');
     return '<ol>\n' + arrayMap + '\n' + lastPre+ '</ol>';
@@ -83,7 +83,7 @@ var syncWrapper = {
           return prefix + '<li>' + key + ':<pre>' + val.toString() + '</pre></li>';
       }
     }).join('\n');
-    return '<ul>\n' + objectMap + '\n' + lastPre + '</ul>';
+    return '<ul>\n'+objectMap+'\n' + lastPre + '</ul>';
   }
 };
 
