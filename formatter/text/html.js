@@ -2,6 +2,20 @@
  * Created by numminorihsf on 15.02.16.
  */
 
+function mapObjectFromArray(val){
+  if (val === null) return '<li>' + syncWrapper.null(val) + '</li>';
+  if (val instanceof Array) return '<li>' + syncWrapper.array(val) + '</li>';
+  if (val.toString === Object.prototype.toString) return '<li>' + syncWrapper.object(val) + '</li>';
+  return '<li><pre>' + val.toString() + '</pre></li>';
+}
+
+function mapObjectFromObject(key, val){
+  if (val === null) return '<li>' + key + ':' + syncWrapper.null(val) + '</li>';
+  if (val instanceof Array) return '<li>' + key + ':' + syncWrapper.array(val) + '</li>';
+  if (val.toString === Object.prototype.toString) return '<li>' + key + ':' + syncWrapper.object(val) + '</li>';
+  return '<li>' + key + ':<pre>' + val.toString() + '</pre></li>';
+}
+
 var syncWrapper = {
   string: function(data){
     return '<span>'+data+'</span>';
@@ -36,10 +50,7 @@ var syncWrapper = {
         case 'undefined':
           return '<li>' + syncWrapper.undefined(val) + '</li>';
         default:
-          if (val === null) return '<li>' + syncWrapper.null(val) + '</li>';
-          if (val instanceof Array) return '<li>' + syncWrapper.array(val) + '</li>';
-          if (val.toString === Object.prototype.toString) return '<li>' + syncWrapper.object(val) + '</li>';
-          return '<li><pre>' + val.toString() + '</pre></li>';
+          return mapObjectFromArray(val);
       }
     }).join('');
     return '<ol>'+arrayMap+'</ol>';
@@ -60,10 +71,7 @@ var syncWrapper = {
         case 'undefined':
           return '<li>' + key + ':' + syncWrapper.undefined(val) + '</li>';
         default:
-          if (val === null) return '<li>' + key + ':' + syncWrapper.null(val) + '</li>';
-          if (val instanceof Array) return '<li>' + key + ':' + syncWrapper.array(val) + '</li>';
-          if (val.toString === Object.prototype.toString) return '<li>' + key + ':' + syncWrapper.object(val) + '</li>';
-          return '<li>' + key + ':<pre>' + val.toString() + '</pre></li>';
+          return mapObjectFromObject(key, val);
       }
     }).join('');
     return '<ul>' + objectMap + '</ul>';
