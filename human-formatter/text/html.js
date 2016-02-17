@@ -2,6 +2,19 @@
  * Created by numminorihsf on 15.02.16.
  */
 
+function mapObjectFromArray(prefix, val, rec){
+  if (val === null) return prefix + '<li>' + syncWrapper.null(val) + '</li>';
+  if (val instanceof Array) return prefix + '<li>' + syncWrapper.array(val, rec+1) + '</li>';
+  if (val.toString === Object.prototype.toString) return prefix + '<li>' + syncWrapper.object(val, rec+1) + '</li>';
+  return prefix + '<li><pre>' + val.toString() + '</pre></li>';
+}
+
+function mapObjectFromObject(prefix, key, val, rec){
+  if (val === null) return prefix + '<li>' + key + ':' + syncWrapper.null(val) + '</li>';
+  if (val instanceof Array) return prefix + '<li>' + key + ':' + syncWrapper.array(val, rec+1) + '</li>';
+  if (val.toString === Object.prototype.toString) return prefix + '<li>' + key + ':' + syncWrapper.object(val, rec+1) + '</li>';
+  return prefix + '<li>' + key + ':<pre>' + val.toString() + '</pre></li>';
+}
 
 var syncWrapper = {
   string: function(data){
@@ -45,10 +58,7 @@ var syncWrapper = {
         case 'undefined':
           return prefix + '<li>' + syncWrapper.undefined(val) + '</li>';
         default:
-          if (val === null) return prefix + '<li>' + syncWrapper.null(val) + '</li>';
-          if (val instanceof Array) return prefix + '<li>' + syncWrapper.array(val, rec+1) + '</li>';
-          if (val.toString === Object.prototype.toString) return prefix + '<li>' + syncWrapper.object(val, rec+1) + '</li>';
-          return prefix + '<li><pre>' + val.toString() + '</pre></li>';
+          return mapObjectFromArray(prefix, val, rec);
       }
     }).join('\n');
     return '<ol>\n' + arrayMap + '\n' + lastPre+ '</ol>';
@@ -77,10 +87,7 @@ var syncWrapper = {
         case 'undefined':
           return prefix + '<li>' + key + ':' + syncWrapper.undefined(val) + '</li>';
         default:
-          if (val === null) return prefix + '<li>' + key + ':' + syncWrapper.null(val) + '</li>';
-          if (val instanceof Array) return prefix + '<li>' + key + ':' + syncWrapper.array(val, rec+1) + '</li>';
-          if (val.toString === Object.prototype.toString) return prefix + '<li>' + key + ':' + syncWrapper.object(val, rec+1) + '</li>';
-          return prefix + '<li>' + key + ':<pre>' + val.toString() + '</pre></li>';
+          return mapObjectFromObject(prefix, key, val, rec);
       }
     }).join('\n');
     return '<ul>\n'+objectMap+'\n' + lastPre + '</ul>';
