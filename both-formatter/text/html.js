@@ -33,7 +33,8 @@ module.exports = function(syncWrapper){
         return cb(null, syncWrapper.array(data));
       }
       if (data.toString === Object.prototype.toString) return cb(null,syncWrapper.object(data));
-      return cb(null, '<pre>'+data.toString()+'</pre>');
+      if (data.toString instanceof Function) return cb(null, '<pre>'+data.toString()+'</pre>');
+      return cb(null, '<pre>'+Object.prototype.toString.call(data)+'</pre>');
     }
   };
   return formats;
