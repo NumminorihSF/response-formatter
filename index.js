@@ -19,8 +19,9 @@ function getDataFromObject (path, sources, callback){
 }
 
 function putDataIntoObject (path, destinations, data){
-  var lastKey = path.pop();
-  var destObject = path.reduce(function(result, key){
+  var clone = path.slice();
+  var lastKey = clone.pop();
+  var destObject = clone.reduce(function(result, key){
     if (!(key in result)) result[key] = {};
     return result[key];
   }, destinations);
