@@ -1,6 +1,6 @@
 {
   "name": "response-formatter",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "An express.js middleware to format your response from server to format, that client waits.",
   "main": "index.js",
   "scripts": {

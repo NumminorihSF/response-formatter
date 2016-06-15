@@ -34,7 +34,7 @@ module.exports = function(syncWrapper){
       }
       if (data.toString === Object.prototype.toString) return cb(null,syncWrapper.object(data));
       if (data.toString instanceof Function) return cb(null, '<pre>'+data.toString()+'</pre>');
-      return syncWrapper.object(data);
+      return cb(null, syncWrapper.object(data));
     }
   };
   return formats;
