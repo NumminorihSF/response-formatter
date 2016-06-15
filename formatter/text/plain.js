@@ -47,7 +47,7 @@ var formats = {
     }
     if (data.toString === Object.prototype.toString) return cb(null,syncWrapper.object(data));
     if (data.toString instanceof Function) return cb(null, data.toString());
-    return syncWrapper.object(data);
+    return cb(null, syncWrapper.object(data));
   }
 };
 
