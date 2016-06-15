@@ -37,6 +37,7 @@ function getFormatter (options){
 
   options.dataSource = options.dataSource || 'res.locals';
   options.dataDestination = options.dataDestination || 'res.sentData';
+  options.formatDestination = options.formatDestination || 'res.sentFormatType';
   if (options.formats instanceof Array){
     if (!options.formats.length){
       options.formats = ['application/json', 'text/xml', 'text/html', 'text/plain'];
@@ -59,6 +60,8 @@ function getFormatter (options){
 
   var boundPutData = putDataIntoObject.bind(this, options.dataDestination.split('.'));
 
+  var boundPutFormatData = putDataIntoObject.bind(this, options.formatDestination.split('.'));
+
   return function(req, res, next){
     var format = req.accepts(options.formats) || options.fallback;
     var sourceAndDestObject = {req: req, res: res, request: req, response: res};
@@ -67,6 +70,7 @@ function getFormatter (options){
       return formatter[format](dataToFormat, function(e, result){
         if (e) return next(e);
         boundPutData(sourceAndDestObject, result);
+        boundPutFormatData(sourceAndDestObject, format);
         return next();
       });
     });

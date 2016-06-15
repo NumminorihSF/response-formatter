@@ -41,6 +41,9 @@ that module will get `res.locals` and try to returning it as result after some w
 * `.dataDestination` _String_ - Path on object, to put result data. Default `'res.sentData'`.
   * Linking to object is like on `.dataSource`
   * If no such route in object, module will create it.
+* `.formatDestination` _String_ - Path on object, to put format that data has. Default `'res.sentFormatType'`.
+  * Linking to object is like on `.dataSource`
+  * If no such route in object, module will create it.
 * `.formats` _String[]_ - Available formats to returning response. Default `['application/json', 'text/xml', 'text/html', 'text/plain']`.
 If is empty array, use default. First format is also used as fallback if client want unexpected format.
 * `.userFormatters` _Object_ - Object with user functions to format response data. Default `{}`.

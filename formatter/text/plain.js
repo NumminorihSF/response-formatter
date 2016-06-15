@@ -46,7 +46,8 @@ var formats = {
       return cb(null, syncWrapper.array(data));
     }
     if (data.toString === Object.prototype.toString) return cb(null,syncWrapper.object(data));
-    return cb(null, data.toString());
+    if (data.toString instanceof Function) return cb(null, data.toString());
+    return syncWrapper.object(data);
   }
 };
 
